@@ -1,42 +1,37 @@
 <template>
   <div class="wrap">
       <div slot="header" class="clearfix">
-       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="ms-content" >
-        <el-form-item label="用户名">
-            <el-input v-model="ruleForm.username" :disabled="true"></el-input>
-        </el-form-item>
-          <el-form-item label="AppSecret">
-            <el-input v-model="ruleForm.appSecret" :disabled="true"></el-input>
-        </el-form-item> 
-        <el-form-item label="开户行" prop='openBank'>
-            <el-input v-model="ruleForm.openBank" placeholder="银行"></el-input>
-        </el-form-item>  
-        <el-form-item label="用户类型" prop='userType'>
-             <el-select v-model="ruleForm.userType" placeholder="请选择用户类型">
-                <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-                </el-option>
-            </el-select>
-        </el-form-item> 
-         <el-form-item label="接入费率" prop='accessRate'>
-            <el-input v-model="ruleForm.accessRate" placeholder="接入费率" type='number' :min=0></el-input>
-        </el-form-item>   
-        <el-form-item label="用户备注" prop='userRemark'>
-            <el-input v-model="ruleForm.userRemark" placeholder="用户备注"></el-input>
-        </el-form-item>
-         <el-form-item label="登录密码" prop='password'>
-            <el-input v-model="ruleForm.password" placeholder="登录密码"></el-input>
-        </el-form-item>       
-         <el-form-item label="下发密码" prop='payPassword'>
-            <el-input v-model="ruleForm.payPassword" placeholder="下发密码"></el-input>
-        </el-form-item>        
-        <div class="login-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-        </div>
-      </el-form>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="ms-content" >
+          <el-form-item label="用户名">
+              <el-input v-model="ruleForm.username" :disabled="true"></el-input>
+          </el-form-item>
+            <el-form-item label="AppSecret">
+              <el-input v-model="ruleForm.appSecret" :disabled="true"></el-input>
+          </el-form-item> 
+          <el-form-item label="开户行" prop='openBank'>
+              <el-input v-model="ruleForm.openBank" placeholder="银行"></el-input>
+          </el-form-item>  
+          <el-form-item label="用户类型" prop='userType'>
+              <el-select v-model="ruleForm.userType" placeholder="请选择用户类型">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+          </el-form-item> 
+          <el-form-item label="接入费率" prop='accessRate'>
+              <el-input v-model="ruleForm.accessRate" placeholder="接入费率" type='number' :min=0></el-input>
+          </el-form-item>   
+          <el-form-item label="用户备注" prop='userRemark'>
+              <el-input v-model="ruleForm.userRemark" placeholder="用户备注"></el-input>
+          </el-form-item>
+          <el-form-item label="登录密码" prop='password'>
+              <el-input v-model="ruleForm.password" placeholder="登录密码"></el-input>
+          </el-form-item>       
+          <el-form-item label="下发密码" prop='payPassword'>
+              <el-input v-model="ruleForm.payPassword" placeholder="下发密码"></el-input>
+          </el-form-item>        
+          <div class="login-btn">
+            <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
+          </div>
+        </el-form>     
       </div>
   </div>
 </template>

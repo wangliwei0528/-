@@ -15,4 +15,14 @@
 .container{
   height:750px;
 }
+.el-input.is-disabled .el-input__inner {
+    background-color: #e5e6e6;
+    border-color: #E4E7ED;
+    color: #989a9e;
+    cursor: not-allowed;
+    border-radius:none;
+}
+.el-input {
+  width:95%;
+}
 </style>

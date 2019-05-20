@@ -26,17 +26,34 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 查看详情 -->
+      <el-dialog title="查看详情" :visible.sync="viewVisible" width="30%">
+          <el-form ref="form" :model="detail"  label-width="100px">
+              <el-form-item label="用户名">
+                  <el-input type='text' v-model="detail.username"  :disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="用户类型">
+                  <el-input type='text' :value='userType' :disabled="true"></el-input>
+              </el-form-item>            
+               <el-form-item label="用户状态" >
+                  <el-input type='text'  v-model="userState" :disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="所属代理" >
+                  <el-input type='text'  v-model="detail.agentname" :disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="开户银行" >
+                  <el-input type='text'  v-model="detail.openBank" :disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="费率" >
+                  <el-input type='text'  v-model="detail.accessRate" :disabled="true"></el-input>
+              </el-form-item>
+              <el-form-item label="AppSecret" >
+                  <el-input type='text'  v-model="detail.appSecret" :disabled="true"></el-input>
+              </el-form-item>
+          </el-form>      
+      </el-dialog>
       <div class="pagination">
-        <el-pagination
-          @current-change="handleCurrentChanges"
-          @size-change="sizeChange"
-          :current-page="pageNum"
-          :page-sizes="pagesizes"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          :background="true"
-        ></el-pagination>
+        <el-pagination @current-change="handleCurrentChanges" @size-change="sizeChange" :current-page="pageNum" :page-sizes="pagesizes" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total" :background="true"></el-pagination>
       </div>
     </div>
   </div>
@@ -57,13 +74,39 @@ export default {
         per_page: 0, //前一页
         pagination: false, //分页器
         select_word:null,//搜索关键词
+        viewVisible:false,
+        detail:{}
     };
   },
   created() {
     this.getData();
   },
+  computed:{
+    userType() {
+      if(this.detail.userType == 3){
+          return '用户'
+      }
+      if(this.detail.userType == 2){
+          return '二级代理'
+      }
+      if(this.detail.userType == 1){
+          return '一级代理'
+      }
+      if(this.detail.userType == 0){
+          return '总平台'
+      }
+    },
+    userState(){
+      if(this.detail.userState == 0){
+          return '正常'
+      }
+      if(this.detail.userState == 1){
+          return '禁用'
+      }
+    }
+  },
   methods: {
-   //页码变更显示当前页的数据
+       //页码变更显示当前页的数据
       handleCurrentChanges: function(currentPage) {
         this.pageNum = currentPage;
         this.getData();
@@ -73,68 +116,81 @@ export default {
         this.pagesize = pagesize;
         this.getData();
       },
-    // 获取数据
-    getData() {
-     this.$loading.show()
-     let data = {
-          pageNum: this.pageNum,
-          pageSize: this.pagesize,
-          param: {
-              username: this.select_word ? this.select_word :null
-          }
-        };
-      this.$axios.post("/juhepay/users/getUsersPage",data).then(res => {
-        this.$loading.hide()
-         if (res.data.success == true) {
-            this.tableData = res.data.data.records;
-            this.total = res.data.data.total;
-          }
-        }).catch(err=>{
-           this.$loading.hide()
-          console.log(err)
-          });
-    },
-    // 查看
-    handleView(index,row){},
-    // 禁用启用
-    handleEdit(index,row){
-        let userState = 1;
-        if(row.userState == 1){
-            userState = 0
-        }
-        if(row.userState == 0){
-            userState = 1
-        }
+      // 获取数据
+      getData() {
+        this.$loading.show()
         let data = {
-            id : row.id,
-            userState : userState 
-        }
-         this.$loading.show()
-        this.$axios.post('/juhepay/users/updateUserstate',data).then(res=>{
-            //  this.$loading.hide()
+              pageNum: this.pageNum,
+              pageSize: this.pagesize,
+              param: {
+                  username: this.select_word ? this.select_word :null
+              }
+            };
+          this.$axios.post("/juhepay/users/getUsersPage",data).then(res => {
+            this.$loading.hide()
             if (res.data.success == true) {
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-                this.getData()
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-              this.getData()
-            }
+                this.tableData = res.data.data.records;
+                this.total = res.data.data.total;
+              }
+            }).catch(err=>{
+              this.$loading.hide()
+              console.log(err)
+            });
+      },
+      // 查看
+      handleView(index,row){
+        this.viewVisible = true;
+        this.$loading.show()
+        this.$axios.post('/juhepay/users/getUsersInfo',{ id : row.id}).then(res=>{
+          this.$loading.hide();
+          if(res.data.success == true){
+              this.detail = res.data.data;
+          }
         })
         .catch(err=>{
-           this.$loading.hide()
-            console.log(err)
+          this.$loading.hide()
+          console.log(err)
         })
-    },
-    // 搜索
-    search(){
-        this.getData()
-    }
+      },
+      // 禁用启用
+      handleEdit(index,row){
+          let userState = 1;
+          if(row.userState == 1){
+              userState = 0
+          }
+          if(row.userState == 0){
+              userState = 1
+          }
+          let data = {
+              id : row.id,
+              userState : userState 
+          }
+          this.$loading.show()
+          this.$axios.post('/juhepay/users/updateUserstate',data).then(res=>{
+              //  this.$loading.hide()
+              if (res.data.success == true) {
+                this.$message({
+                  message: res.data.msg,
+                  type: "success"
+                });
+                  this.getData()
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                });
+                this.getData()
+              }
+          })
+          .catch(err=>{
+            this.$loading.hide()
+              console.log(err)
+          })
+      },
+      // 搜索
+      search(){
+          this.getData()
+      }
   
   }
 };
@@ -161,6 +217,5 @@ export default {
   width: 100%;
   font-size: 14px;
 }
-
 
 </style>
