@@ -15,8 +15,8 @@
         <el-table-column prop="todayMoney" label="当日收益"></el-table-column>
         <el-table-column label="操作"  align="center">
          <template slot-scope="scope">               
-                <i class="el-icon-set-up fontIcon"></i><el-button type="text"  @click="handleEdit(scope.$index, scope.row)">{{scope.row.userState == 0 ?'禁用':'启用'}}</el-button>
-                <i class="el-icon-postcard fontIcon"></i><el-button type="text"  @click="handleView(scope.$index, scope.row)">查看</el-button>
+               <el-button type="text"  @click="handleEdit(scope.$index, scope.row)">{{scope.row.userState == 0 ?'禁用':'启用'}}</el-button>
+               <el-button type="text"  @click="handleView(scope.$index, scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -69,22 +69,22 @@ export default {
       },
     // 获取数据
     getData() {
-     this.$loading.show()
+    //  this.$loading.show()
      let data = {
           pageNum: this.pageNum,
           pageSize: this.pagesize,       
         };
       this.$axios
-        .post("/juhepay/users/getAllAgents",data)
+        .post("/juhepay/users/getAgentsPage",data)
         .then(res => {
-         this.$loading.hide()
+        //  this.$loading.hide()
          if (res.data.success == true) {
             this.tableData = res.data.data.records;
             this.total = res.data.data.total;
           }
         }).catch(
           err=>{
-            this.$loading.hide()
+            // this.$loading.hide()
             console.log(err)
           }
         );
@@ -93,7 +93,7 @@ export default {
     handleView(index,row){},
     // 禁用启用
     handleEdit(index,row){
-         this.$loading.show()
+        //  this.$loading.show()
         let userState = 1;
         if(row.userState == 1){
             userState = 0
@@ -106,7 +106,7 @@ export default {
             userState : userState 
         }
         this.$axios.post('/juhepay/users/updateUserstate',data).then(res=>{
-             this.$loading.hide()
+            //  this.$loading.hide()
             if (res.data.success == true) {
               this.$message({
                 message: res.data.msg,
@@ -122,7 +122,7 @@ export default {
             }
         })
         .catch(err=>{
-          this.$loading.hide()
+          // this.$loading.hide()
             console.log(err)
         })
     },
