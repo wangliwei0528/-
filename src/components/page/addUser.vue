@@ -96,9 +96,9 @@ export default {
   methods: {
     //   获取登录名和秘钥
     getUsername(){
-        //  this.$loading.show()
+       this.$loading.show()
        this.$axios.post('/juhepay/users/getUsernameAndAppsecret').then(res=>{
-            // this.$loading.hide()
+            this.$loading.hide()
            if(res.data.success == true){
                this.ruleForm.username = res.data.data.username;
                this.ruleForm.appSecret = res.data.data.appSecret;
@@ -110,11 +110,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-            //  this.$loading.show()
-            this.$axios
-              .post("/juhepay/users/createUsers", this[formName])
-              .then(res => {
-                  //  this.$loading.hide()
+             this.$loading.show()
+             this.$axios.post("/juhepay/users/createUsers", this[formName]).then(res => {
+                this.$loading.hide()
                 if (res.data.success == true) {
                   this.$message({
                     message: res.data.msg,
@@ -134,6 +132,7 @@ export default {
                 }
               })
               .catch(err => {
+                this.$loading.hide()
                 console.log(err);
               });
         } else {

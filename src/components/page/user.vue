@@ -75,7 +75,7 @@ export default {
       },
     // 获取数据
     getData() {
-    //  this.$loading.show()
+     this.$loading.show()
      let data = {
           pageNum: this.pageNum,
           pageSize: this.pagesize,
@@ -83,16 +83,14 @@ export default {
               username: this.select_word ? this.select_word :null
           }
         };
-      this.$axios
-        .post("/juhepay/users/getUsersPage",data)
-        .then(res => {
-        // this.$loading.hide()
+      this.$axios.post("/juhepay/users/getUsersPage",data).then(res => {
+        this.$loading.hide()
          if (res.data.success == true) {
             this.tableData = res.data.data.records;
             this.total = res.data.data.total;
           }
         }).catch(err=>{
-          //  this.$loading.hide()
+           this.$loading.hide()
           console.log(err)
           });
     },
@@ -111,7 +109,7 @@ export default {
             id : row.id,
             userState : userState 
         }
-        //  this.$loading.show()
+         this.$loading.show()
         this.$axios.post('/juhepay/users/updateUserstate',data).then(res=>{
             //  this.$loading.hide()
             if (res.data.success == true) {
@@ -129,7 +127,7 @@ export default {
             }
         })
         .catch(err=>{
-          //  this.$loading.hide()
+           this.$loading.hide()
             console.log(err)
         })
     },

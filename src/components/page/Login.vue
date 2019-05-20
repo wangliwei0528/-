@@ -79,7 +79,7 @@ export default {
                     type: "success"
                   });
                   let {name,userType} = res.data.data;
-                  this.$router.push("/");
+                  this.$router.push("/user");
                   localStorage.setItem("name", name);
                   localStorage.setItem("userType", userType);         
                 } else {
